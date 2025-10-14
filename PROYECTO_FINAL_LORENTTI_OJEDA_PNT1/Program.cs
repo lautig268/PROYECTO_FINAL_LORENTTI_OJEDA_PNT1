@@ -1,27 +1,32 @@
+using PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Conexión a SQL Server
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuración del middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseHttpsRedirection(); // Redirección HTTP -> HTTPS
+app.UseStaticFiles();      // Servir archivos estáticos (CSS, JS, imágenes, etc.)
 
-app.UseRouting();
+app.UseRouting();          // Habilita el enrutamiento
+app.UseAuthorization();    // Middleware de autorización (si lo necesitas)
 
-app.UseAuthorization();
-
+// Definir ruta por defecto (MVC)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+app.Run(); // Ejecuta la app

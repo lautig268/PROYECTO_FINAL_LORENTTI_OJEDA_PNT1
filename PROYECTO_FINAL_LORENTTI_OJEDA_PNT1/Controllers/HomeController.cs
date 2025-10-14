@@ -15,6 +15,8 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
 
         public IActionResult Index()
         {
+
+            ViewBag.Usuario = Sesion.user;
             return View();
         }
 
