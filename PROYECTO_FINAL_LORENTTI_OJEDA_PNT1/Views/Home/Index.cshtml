@@ -4,11 +4,25 @@
 
 <p>
 
-    @ViewBag.Usuario.Nombre;
+    @ViewBag.Usuario.Nombre
 
 </p>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+
+@{
+    for (int i = 0; i < ViewBag.productos.Count; i++)
+    {
+        <p class="card-text">@ViewBag.productos[i].Nombre</p>
+        <p class="card-text">@ViewBag.productos[i].Descripcion</p>
+        <p class="card-text"><strong>Precio:</strong> $@ViewBag.productos[i].Precio</p>
+        <p class="card-text"><strong>Stock:</strong> @ViewBag.productos[i].Stock</p>
+        <form asp-action="AgregarAlCarrito" method="post">
+            <input type="hidden" name="productoId" value="@ViewBag.productos[i].ID" />
+            <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+        </form>
+        
+    }
+
+}
+

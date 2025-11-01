@@ -6,7 +6,7 @@
 
         public string Nombre { get; set; }
 
-        public string Email { get; set; } 
+        public string Email { get; set; }
 
         public string Contrasena { get; set; }
 
@@ -14,10 +14,11 @@
 
         public Usuario() { }
 
-        public Usuario(string email, string contrasena, string nombre, string telefono) { 
+        public Usuario(string email, string contrasena, string nombre, string telefono)
+        {
             Email = email;
             Contrasena = contrasena;
-            Telefono = telefono;    
+            Telefono = telefono;
             Nombre = nombre;
         }
 

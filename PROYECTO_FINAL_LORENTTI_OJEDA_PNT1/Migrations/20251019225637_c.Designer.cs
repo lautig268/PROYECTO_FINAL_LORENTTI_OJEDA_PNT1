@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Data;
 
@@ -10,9 +11,11 @@ using PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Data;
 namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251019225637_c")]
+    partial class c
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,50 +69,6 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Migrations
                     b.HasIndex("ProductoId");
 
                     b.ToTable("CarritoItems");
-                });
-
-            modelBuilder.Entity("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Compra", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Compra");
-                });
-
-            modelBuilder.Entity("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.CompraItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompraId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompraId");
-
-                    b.HasIndex("ProductoId");
-
-                    b.ToTable("CompraItem");
                 });
 
             modelBuilder.Entity("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Producto", b =>
@@ -198,42 +157,7 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Migrations
                     b.Navigation("Producto");
                 });
 
-            modelBuilder.Entity("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Compra", b =>
-                {
-                    b.HasOne("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.CompraItem", b =>
-                {
-                    b.HasOne("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Compra", "Compraa")
-                        .WithMany("Items")
-                        .HasForeignKey("CompraId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Producto", "Producto")
-                        .WithMany()
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Compraa");
-
-                    b.Navigation("Producto");
-                });
-
             modelBuilder.Entity("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Carrito", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Models.Compra", b =>
                 {
                     b.Navigation("Items");
                 });

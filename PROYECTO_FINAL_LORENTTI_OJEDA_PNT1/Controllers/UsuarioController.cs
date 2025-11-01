@@ -23,9 +23,11 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
         }
 
         [HttpPost]
-        public ActionResult LogInPost(string email, string contrasena) {
+        public ActionResult LogInPost(string email, string contrasena)
+        {
             Usuario usu = context_.Usuario.FirstOrDefault<Usuario>(u => u.Email == email);
-            if (usu.Contrasena == contrasena) {
+            if (usu.Contrasena == contrasena)
+            {
                 Sesion.user = usu;
                 return RedirectToAction("Index", "Home");
             }
