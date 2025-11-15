@@ -21,19 +21,24 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
         [HttpPost]
         public IActionResult AgregarAlCarrito(int productoId)
         {
-            // Aquí deberías obtener el carrito del usuario actual
-            // Por simplicidad, asumimos que hay un carrito de ejemplo
+            // Buscar el carrito del usuario actual
             var carrito = context_.Carrito
                 .Include(c => c.Items)
-                .FirstOrDefault(c => c.UsuarioId == Sesion.user.ID); // Cambiar según tu usuario logueado
+                .FirstOrDefault(c => c.UsuarioId == Sesion.user.ID); // Cambiar según tu lógica de usuario
 
+            // Si el usuario no tiene carrito, lo creamos
             if (carrito == null)
             {
-                carrito = new Carrito { UsuarioId = Sesion.user.ID };
+                carrito = new Carrito
+                {
+                    UsuarioId = Sesion.user.ID,
+                    Items = new List<CarritoItem>() // ? importante
+                };
                 context_.Carrito.Add(carrito);
-                context_.SaveChanges();
+                context_.SaveChanges(); // guardamos para obtener el Id del carrito
             }
 
+            // Buscamos el producto
             var producto = context_.Productos.Find(productoId);
             if (producto == null)
                 return NotFound();
@@ -56,17 +61,31 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
 
             context_.SaveChanges();
 
-            // Redirigir de nuevo a Home
+            // Redirigimos de nuevo a Home (o donde corresponda)
             return RedirectToAction("Index");
         }
 
         public IActionResult Carrito() {
             //var idCarrito = context_.Carrito.FirstOrDefault(p=> p.Id == Sesion.user.ID).Id; 
-            var lista = context_.CarritoItems.Include(ci => ci.Producto).Where(p =>p.CarritoId == Sesion.user.ID).ToList();
-            ViewBag.Carritoo = lista;
 
 
+            //var lista = context_.CarritoItems.Include(ci => ci.Producto).Where(p =>p.CarritoId == Sesion.user.ID).ToList();
+            //ViewBag.Carritoo = lista;
 
+            var carrito = context_.Carrito
+       .Include(c => c.Items)
+       .ThenInclude(i => i.Producto)
+       .FirstOrDefault(c => c.UsuarioId == Sesion.user.ID);
+
+            // Convertimos los Items (HashSet) a List para que acepte [i] en la vista
+            if (carrito == null || carrito.Items == null || !carrito.Items.Any())
+            {
+                ViewBag.Carritoo = new List<CarritoItem>();
+            }
+            else
+            {
+                ViewBag.Carritoo = carrito.Items.ToList();
+            }
 
             return View();
         }
