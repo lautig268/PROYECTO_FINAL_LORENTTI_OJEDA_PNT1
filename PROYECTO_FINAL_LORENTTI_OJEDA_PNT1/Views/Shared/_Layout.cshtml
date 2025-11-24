@@ -4,50 +4,142 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Tienda Online</title>
+
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #1f2937; /* Oscuro pero no negro */
+            color: #e5e7eb; /* Gris claro */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background-color: #2d3748 !important; /* un poco más claro */
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .navbar-custom .nav-link,
+        .navbar-brand {
+            color: #f1f5f9 !important;
+            font-weight: 500;
+        }
+
+        .navbar-custom .nav-link:hover {
+            color: #93c5fd !important;
+        }
+
+        /* Container */
+        .container-custom {
+            background: #374151;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2d3748;
+            color: #cbd5e1;
+            padding: 15px 0;
+            border-top: 1px solid #4a5568;
+            margin-top: 40px;
+        }
+
+        footer a {
+            color: #93c5fd;
+        }
+
+        footer a:hover {
+            color: #bfdbfe;
+        }
+
+        /* Botones */
+        .btn-primary {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+    </style>
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.styles.css" asp-append-version="true" />
 </head>
+
 <body>
+
+    <!-- NAVBAR -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-custom navbar-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tienda Online</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    🛒 Tienda Online
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Carrito">Carrito</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Carrito">Carrito</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacidad</a>
                         </li>
+
+                        <li class="nav-item ms-3">
+                            <a class="btn btn-danger" asp-controller="Usuario" asp-action="LogIn">Iniciar Sesión</a>
+                        </li>
+
+                        <li class="nav-item ms-2">
+                            <a class="btn btn-dark text-white" asp-controller="Usuario" asp-action="Register">Registrarse</a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+
+    <!-- CONTENIDO -->
+    <div class="container container-custom">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+
+    <!-- FOOTER -->
+    <footer class="text-center">
         <div class="container">
-            &copy; 2025 - Tienda Online - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Tienda Online •
+            <a asp-controller="Home" asp-action="Privacy">Política de Privacidad</a>
         </div>
     </footer>
+
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

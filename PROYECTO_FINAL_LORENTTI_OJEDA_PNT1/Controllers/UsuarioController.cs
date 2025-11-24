@@ -22,6 +22,9 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
             return View();
         }
 
+     
+
+
         [HttpPost]
         public ActionResult LogInPost(string email, string contrasena)
         {
