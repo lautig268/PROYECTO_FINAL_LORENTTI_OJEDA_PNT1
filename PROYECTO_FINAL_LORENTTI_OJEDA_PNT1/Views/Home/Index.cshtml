@@ -15,10 +15,15 @@
          for (int i = 0; i < ViewBag.productos.Count; i++)
         {    
            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <img src="@ViewBag.productos[i].Imagen"
+                         alt="Imagen del producto"
+                         class="img-fluid rounded mb-2"
+                         style="max-height: 200px; object-fit: contain; width: 100%;" />
            <p class="card-text">@ViewBag.productos[i].Nombre</p>
             <p class="card-text">@ViewBag.productos[i].Descripcion</p>
            <p class="card-text"><strong>Precio:</strong> $@ViewBag.productos[i].Precio</p>
            <p class="card-text"><strong>Stock:</strong> @ViewBag.productos[i].Stock</p>
+
            <form asp-action="AgregarAlCarrito" method="post">
                <input type="hidden" name="productoId" value="@ViewBag.productos[i].ID" />
                <button type="submit" class="btn btn-primary">Agregar al carrito</button>

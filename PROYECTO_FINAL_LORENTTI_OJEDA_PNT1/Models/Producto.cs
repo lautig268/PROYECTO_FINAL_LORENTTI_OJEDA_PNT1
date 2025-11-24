@@ -13,16 +13,19 @@
 
         public int Stock { get; set; }
 
+        public string Imagen { get; set; }
+
         public ICollection<CarritoItem> CarritoItems { get; set; }
 
         public Producto() { }
 
-        public Producto(string nombre, string descripcion, decimal precio, int stock)
+        public Producto(string nombre, string descripcion, decimal precio, int stock, string imagen)
         {
             Descripcion = descripcion;
             Precio = precio;
             Stock = stock;
             Nombre = nombre;
+            Imagen = imagen;
         }
     }
 }
