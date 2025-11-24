@@ -21,6 +21,18 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
         [HttpPost]
         public IActionResult AgregarAlCarrito(int productoId)
         {
+            if (Sesion.user == null)
+            {
+                return RedirectToAction("LogIn", "Usuario");
+            }
+
+            // 2? Validar que el usuario existe en BD
+            var usuarioEnBD = context_.Usuario.Find(Sesion.user.ID);
+            if (usuarioEnBD == null)
+            {
+                return RedirectToAction("LogIn", "Usuario");
+            }
+
             // Buscar el carrito del usuario actual
             var carrito = context_.Carrito
                 .Include(c => c.Items)
