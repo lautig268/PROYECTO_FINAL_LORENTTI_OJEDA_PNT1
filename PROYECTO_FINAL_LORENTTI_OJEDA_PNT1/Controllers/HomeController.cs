@@ -18,6 +18,45 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
             context_ = context;
         }
 
+
+        [HttpPost]
+        public IActionResult EliminarItem(int itemId)
+        {
+            var item = context_.CarritoItems
+                .Include(ci => ci.Carrito)
+                .Include(ci => ci.Producto)
+                .FirstOrDefault(ci => ci.Id == itemId);
+
+            if (item == null)
+            {
+                TempData["Error"] = "El producto no existe en el carrito.";
+                return RedirectToAction("Carrito");
+            }
+
+            if (item.Carrito.UsuarioId != Sesion.user.ID)
+            {
+                TempData["Error"] = "No tenés permiso para borrar ese item.";
+                return RedirectToAction("Carrito");
+            }
+
+            // Si hay más de 1, solamente resta 1 unidad
+            if (item.Cantidad > 1)
+            {
+                item.Cantidad -= 1;
+                TempData["Mensaje"] = $"Se quitó 1 unidad de {item.Producto.Nombre}.";
+            }
+            else
+            {
+                // Si la cantidad es 1, se elimina el ítem completo
+                context_.CarritoItems.Remove(item);
+                TempData["Mensaje"] = $"{item.Producto.Nombre} eliminado del carrito.";
+            }
+
+            context_.SaveChanges();
+
+            return RedirectToAction("Carrito");
+        }
+
         [HttpPost]
         public IActionResult AgregarAlCarrito(int productoId)
         {
@@ -26,7 +65,7 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
                 return RedirectToAction("LogIn", "Usuario");
             }
 
-            // 2? Validar que el usuario existe en BD
+            // Validar que el usuario existe en BD
             var usuarioEnBD = context_.Usuario.Find(Sesion.user.ID);
             if (usuarioEnBD == null)
             {
@@ -36,7 +75,7 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
             // Buscar el carrito del usuario actual
             var carrito = context_.Carrito
                 .Include(c => c.Items)
-                .FirstOrDefault(c => c.UsuarioId == Sesion.user.ID); // Cambiar según tu lógica de usuario
+                .FirstOrDefault(c => c.UsuarioId == Sesion.user.ID);
 
             // Si el usuario no tiene carrito, lo creamos
             if (carrito == null)
@@ -44,7 +83,7 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
                 carrito = new Carrito
                 {
                     UsuarioId = Sesion.user.ID,
-                    Items = new List<CarritoItem>() // ? importante
+                    Items = new List<CarritoItem>()
                 };
                 context_.Carrito.Add(carrito);
                 context_.SaveChanges(); // guardamos para obtener el Id del carrito
@@ -55,27 +94,45 @@ namespace PROYECTO_FINAL_LORENTTI_OJEDA_PNT1.Controllers
             if (producto == null)
                 return NotFound();
 
+            // Si no hay stock físico, no se puede agregar al carrito
+            if (producto.Stock <= 0)
+            {
+                TempData["Error"] = "No hay stock disponible.";
+                return RedirectToAction("Index");
+            }
+
             // Verificar si ya existe el item en el carrito
             var item = carrito.Items.FirstOrDefault(i => i.ProductoId == productoId);
             if (item != null)
             {
+                // Validar que al sumar 1 no supere el stock disponible (stock físico)
+                if (item.Cantidad + 1 > producto.Stock)
+                {
+                    TempData["Error"] = " ";
+                    return RedirectToAction("Index");
+                }
+
                 item.Cantidad += 1;
             }
             else
             {
+                // Al crear un nuevo item, la cantidad inicial es 1; ya sabemos que producto.Stock >= 1
                 carrito.Items.Add(new CarritoItem
                 {
+                    CarritoId = carrito.Id,
                     ProductoId = productoId,
                     Cantidad = 1,
                     Precio = producto.Precio
                 });
             }
 
+            // NO restamos producto.Stock aquí — el stock físico se modifica únicamente en Comprar()
+
             context_.SaveChanges();
 
-            // Redirigimos de nuevo a Home (o donde corresponda)
             return RedirectToAction("Index");
         }
+
 
         public IActionResult Carrito() {
             //var idCarrito = context_.Carrito.FirstOrDefault(p=> p.Id == Sesion.user.ID).Id; 

@@ -9,6 +9,12 @@
 
 
 
-
+    @if (Sesion.user != null && Sesion.user.ID != 0)
+    {
+        <form asp-controller="Usuario" asp-action="LogOut" method="post" class="mt-3">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+        </form>
+    }
 
 </form>

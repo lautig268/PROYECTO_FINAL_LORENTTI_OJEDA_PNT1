@@ -1,41 +1,49 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     decimal total = 0;
+}
 
-    for (int i = 0; i < ViewBag.Carritoo.Count; i++)
+<h2>Tu carrito</h2>
+
+@if (ViewBag.Carritoo.Count == 0)
+{
+    <p>No hay productos en el carrito.</p>
+}
+else
+{
+    foreach (var item in ViewBag.Carritoo)
     {
-        total += ViewBag.Carritoo[i].Producto.Precio;
+        var subtotal = item.Cantidad * item.Precio;
+        total += subtotal;
 
-     <div class="mb-2">
-    
-        <p>
+        <div class="mb-3 p-2 border rounded">
 
-        @ViewBag.Carritoo[i].Producto.Nombre
-        — $@ViewBag.Carritoo[i].Producto.Precio
+            <p>
+                <strong>@item.Producto.Nombre</strong><br />
+                Precio unitario: $@item.Precio<br />
+                Cantidad: @item.Cantidad<br />
+                <strong>Subtotal: $@subtotal</strong>
+            </p>
 
-         </p>
-
-            <img src="@ViewBag.Carritoo[i].Producto.Imagen"
-                 alt="img"
+            <img src="@item.Producto.Imagen"
+                 alt="Imagen del producto"
                  style="width:60px; height:60px; object-fit:cover; border-radius:6px;" />
 
-    </div>
-    
-       
 
-}
+            <form asp-action="EliminarItem" method="post" style="display:inline;">
+                <input type="hidden" name="itemId" value="@item.Id" />
+                <button type="submit" class="btn btn-danger btn-sm">
+                    Eliminar un ítem
+                </button>
+            </form>
+        </div>
+    }
 
     <hr />
+    <h3>Total a pagar: $@total</h3>
 
-    <h4>Total: $@total</h4>
+    <form asp-action="Comprar" method="post">
+        <button type="submit" class="btn btn-success">Confirmar compra</button>
+    </form>
 }
 
-
-<form asp-action="Comprar" method="post">
-    <button type="submit" class="btn btn-primary">Comprar</button>
-</form>
-
-@TempData["Mensaje"]
-
+<div class="text-danger">@TempData["Error"]</div>
